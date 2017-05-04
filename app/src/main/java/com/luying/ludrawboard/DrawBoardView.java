@@ -145,6 +145,7 @@ public class DrawBoardView extends View{
         info.path = cachePath;
         info.paint = cachePaint;
         mDrawingList.add(info);
+        mCanEraser = true;
         if (callback != null){
             callback.onUndoRedoStatusChanged();
         }
