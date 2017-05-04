@@ -37,6 +37,7 @@ public class DrawBoardView extends View{
 
     private Xfermode mClearMode;
     private boolean mCanEraser;
+    private Callback callback;
 
     private static final int MAX_CACHE_STEP = 20;
 
@@ -46,6 +47,10 @@ public class DrawBoardView extends View{
     }
     private Mode mMode = Mode.DRAW;
 
+    //设置保存路径回掉
+    public void setCallback(Callback callback) {
+        this.callback = callback;
+    }
 
     public DrawBoardView(Context context) {
         this(context, null);
@@ -131,15 +136,16 @@ public class DrawBoardView extends View{
         }else if (mDrawingList.size() == MAX_CACHE_STEP){
             mDrawingList.remove(0);
         }
+        Path cachePath = new Path(mPath);
+        Paint cachePaint = new Paint(mPaint);
+        PathDrawingInfo info = new PathDrawingInfo();
+        info.path = cachePath;
+        info.paint = cachePaint;
+        mDrawingList.add(info);
+        if (callback != null){
+            callback.onUndoRedoStatusChanged();
+        }
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -147,5 +153,21 @@ public class DrawBoardView extends View{
     private abstract static class DrawingInfo {
         Paint paint;
         abstract void draw(Canvas canvas);
+    }
+
+    private static class PathDrawingInfo extends DrawingInfo{
+
+        Path path;
+
+        @Override
+        void draw(Canvas canvas) {
+            canvas.drawPath(path, paint);
+        }
+    }
+
+
+    public interface Callback {
+        //每次手指抬起时调用此方法，监听保存
+        void onUndoRedoStatusChanged();
     }
 }
