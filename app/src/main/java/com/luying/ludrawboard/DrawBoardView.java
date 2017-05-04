@@ -3,6 +3,7 @@ package com.luying.ludrawboard;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
@@ -81,7 +82,9 @@ public class DrawBoardView extends View{
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+        if (mBitmap != null){
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+        }
     }
 
 
@@ -148,7 +151,98 @@ public class DrawBoardView extends View{
     }
 
 
+    //设置模式，画笔／橡皮(默认画笔)
+    public void setMode(Mode mode){
+        if (mode != null){
+            mMode = mode;
+            if (mMode == Mode.DRAW){
+                mPaint.setXfermode(null);//置空图像混合取消橡皮擦
+                mPaint.setStrokeWidth(mDrawSize);
+            }else {
+                mPaint.setXfermode(mClearMode);
+                mPaint.setStrokeWidth(mEraserSize);
+            }
+        }
+    }
 
+    //撤销
+    public void undo() {
+        int size = mDrawingList == null ? 0 : mDrawingList.size();
+        if (size > 0) {
+            DrawingInfo info = mDrawingList.remove(size - 1);
+            if (mRemovedList == null) {
+                mRemovedList = new ArrayList<>(MAX_CACHE_STEP);
+            }
+
+            if (size == 1) {
+                mCanEraser = false;
+            }
+            mRemovedList.add(info);
+            reDraw();
+            if (callback != null){
+                callback.onUndoRedoStatusChanged();
+            }
+        }
+
+    }
+    //撤销上一次撤销
+    public void redo(){
+        int size = mRemovedList == null ? 0 : mRemovedList.size();
+        if (size > 0){
+            DrawingInfo info = mRemovedList.remove(size - 1);
+            mDrawingList.add(info);
+            mCanEraser = true;
+            reDraw();
+            if (callback != null){
+                callback.onUndoRedoStatusChanged();
+            }
+        }
+    }
+
+    public void reDraw() {
+        if (mDrawingList != null){
+            mBitmap.eraseColor(Color.TRANSPARENT);
+            for (DrawingInfo drawingInfo : mDrawingList){
+                drawingInfo.draw(mCanvas);
+            }
+            invalidate();
+        }
+    }
+
+    //清除所有
+    public void clear(){
+        if (mBitmap != null){
+            if (mDrawingList != null){
+                mDrawingList.clear();
+            }
+            if (mRemovedList != null){
+                mRemovedList.clear();
+            }
+
+            mCanEraser = false;
+            mBitmap.eraseColor(Color.TRANSPARENT);
+            invalidate();;
+            if (callback != null){
+                callback.onUndoRedoStatusChanged();
+            }
+        }
+    }
+
+    public boolean canRedo(){
+        return mRemovedList != null && mRemovedList.size() > 0;
+    }
+
+    public boolean canUndo(){
+        return mDrawingList != null && mDrawingList.size() > 0;
+    }
+
+    //canvas撸出个bitmap用于保存路径
+    public Bitmap buildBitmap(){
+        Bitmap bm = getDrawingCache();
+        Bitmap result = Bitmap.createBitmap(bm);
+        destroyDrawingCache();
+        return result;
+    }
 
     private abstract static class DrawingInfo {
         Paint paint;
