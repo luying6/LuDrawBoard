@@ -8,12 +8,15 @@
 <p>拓展--》用socket长链接搞成时时的用于一些网络会议展示什么的，也可以在app里面架设一个server用于wife传图附带涂鸦效果功能，或者游戏你画我猜之类的，总之应用场景很多！</p>
 
 <p>使用起来也很简单:</p>
+
+<p>
   <com.luying.ludrawboard.DrawBoardView
           android:id="@+id/drawBoard"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:background="@drawable/background" />
-          
+
+ </p>
           
  <p>然后在activity里面直接调用就可以了</p>
  <p>画笔和橡皮擦切换用setModel(Model model) 方法</p>
