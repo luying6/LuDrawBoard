@@ -22,7 +22,7 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
+        <TextView
             android:id="@+id/undo"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -30,10 +30,12 @@
             android:background="@drawable/toolbar_item_bg"
             android:padding="10dp"
             android:scaleType="centerInside"
+            android:text="撤销"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:clickable="true"/>
 
-            android:src="@drawable/undo" />
-
-        <ImageView
+        <TextView
             android:id="@+id/redo"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -41,32 +43,37 @@
             android:background="@drawable/toolbar_item_bg"
             android:padding="10dp"
             android:scaleType="centerInside"
-            android:src="@drawable/redo" />
+            android:text="反撤销"
+            android:gravity="center"
+            android:clickable="true"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/pen"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/toolbar_item_bg"
             android:padding="10dp"
-
+            android:text="画笔"
+            android:gravity="center"
             android:scaleType="centerInside"
-            android:src="@drawable/pen" />
+            android:clickable="true"
+             />
 
-        <ImageView
+        <TextView
             android:id="@+id/eraser"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/toolbar_item_bg"
             android:padding="10dp"
+            android:text="橡皮擦"
+            android:gravity="center"
             android:scaleType="centerInside"
-            android:src="@drawable/eraser"
-
+            android:clickable="true"
             />
 
-        <ImageView
+        <TextView
             android:id="@+id/clear"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -74,7 +81,8 @@
             android:background="@drawable/toolbar_item_bg"
             android:padding="10dp"
             android:scaleType="centerInside"
-
-            android:src="@drawable/clear" />
+            android:text="清除"
+            android:gravity="center"
+            android:clickable="true"/>
     </LinearLayout>
 </LinearLayout>

@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="green">#24c875</color>
+    <color name="grey">#fe111212</color>
 
     <drawable name="toolbar_bg">#30000000</drawable>
 </resources>
